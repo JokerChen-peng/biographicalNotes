@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.less';
 import { ROUTER_ENTRY,ROUTER_KEY} from '@common/contants/router';
 import { useHistory } from 'react-router';
 import { shell } from 'electron'
 import Logo from '@assets/logo.png';
 import { isHttpOrHttpsUrl } from '@common/utils/router'
+import { useSelector,useDispatch} from 'react-redux'
 function Root() {
    const history = useHistory();
+   const dispatch = useDispatch();
+   const appName = useSelector((state:any)=>state.globalModel.appName)
+   useEffect(() => {
+    setTimeout(() => {
+      console.log('3s 后修改...');
+      dispatch({
+        type: 'globalModel/setStore',
+        payload: {
+          key: 'appName',
+          values: 'visResumeMook',
+        },
+      });
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    console.log('appName = ', appName);
+  }, [appName]);
    const onRouterTolink = (router:TSRouter.Item) => {
      if (isHttpOrHttpsUrl(router.url)){
       shell.openExternal(router.url)

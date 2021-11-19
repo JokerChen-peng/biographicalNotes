@@ -4,6 +4,7 @@ import MyScrollBox from '@common/components/MyScrollBox';
 import RESUME_TOOLBAR_LIST from '@common/constants/resume';
 import { onAddToolbar, onDeleteToolbar } from './utils';
 import {useDispatch} from 'react-redux';
+import Messager, { MESSAGE_EVENT_NAME_MAPS } from '@common/messager';
 function ResumeToolbar() {
   const height = document.body.clientHeight;
   const [addToolbarList, setAddToolbarList] = useState<TSResume.SliderItem[]>([]);
@@ -45,34 +46,55 @@ function ResumeToolbar() {
 
   // 删除模块
   const onDeleteSliderAction = (moduleSlider: TSResume.SliderItem) => {
-    if (!moduleSlider.require) {
+    
       const nextAddSliderList = onDeleteToolbar(addToolbarList, moduleSlider);
       setAddToolbarList(nextAddSliderList);
       const nextUnAddSliderList = onAddToolbar(unAddToolbarList, moduleSlider);
       setUnAddToolbarList(nextUnAddSliderList);
       changeResumeToolbarKeys(nextAddSliderList.map((s: TSResume.SliderItem) => s.key));
-    }
+    
   };
-
+  console.log('Toolbar 被执行了')
   return (
     <div styleName="slider">
       <MyScrollBox maxHeight={height - 180}>
-        {!!addToolbarList.length && (
+      {!!addToolbarList.length && (
           <div styleName="module">
             <div styleName="title">
               <span styleName="line" />
               已添加模块
             </div>
             <div styleName="content">
-              {addToolbarList.map((toolbar: TSResume.SliderItem) => {
+              {addToolbarList.map((addSlider: TSResume.SliderItem) => {
                 return (
-                  <div styleName="box" key={toolbar.key} onClick={() => onDeleteSliderAction(toolbar)}>
+                  <div
+                    styleName="box"
+                    key={addSlider.key}
+                    onClick={() => {
+                      Messager.send(MESSAGE_EVENT_NAME_MAPS.OPEN_FORM_MODAL, {
+                        form_name: addSlider.key,
+                      });
+                    }}
+                  >
                     <div styleName="info">
                       <i styleName="icon" />
                       <div styleName="text">
-                        <div styleName="name">{toolbar.name}</div>
-                        <div styleName="summary">{toolbar.summary}</div>
+                        <div styleName="name">{addSlider.name}</div>
+                        <div styleName="summary">{addSlider.summary}</div>
                       </div>
+                      {addSlider.require && <div styleName="tips">必选项</div>}
+                      {!addSlider.require && (
+                        <div styleName="action">
+                          <i styleName="edit" onClick={(e: React.MouseEvent) => {}} />
+                          <i
+                            styleName="delete"
+                            onClick={(e: React.MouseEvent) => {
+                              e.stopPropagation && e.stopPropagation();
+                              onDeleteSliderAction(addSlider);
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -108,4 +130,4 @@ function ResumeToolbar() {
   );
 }
 
-export default ResumeToolbar;
+export default React.memo(ResumeToolbar);

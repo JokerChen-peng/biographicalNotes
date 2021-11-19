@@ -6,6 +6,7 @@ import ResumeContent from './ResumeContent';
 import ResumeToolbar from './ResumeToolbar';
 
 function Resume() {
+  console.log('Root 被执行了')
   return (
     <div styleName="container">
       <div styleName="header">

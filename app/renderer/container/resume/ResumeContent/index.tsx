@@ -12,6 +12,6 @@ function ResumeContent() {
     <MyScrollBox maxHeight={height - HEADER_ACTION_HEIGHT}>
       <UseTemplateList.TemplateOne />
     </MyScrollBox>
-  );
+  ); 
 }
 export default ResumeContent;

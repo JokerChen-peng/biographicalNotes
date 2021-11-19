@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.less';
-import { ROUTER_ENTRY,ROUTER_KEY} from '@common/contants/router';
+import { ROUTER_ENTRY,ROUTER_KEY} from '@src/common/constants/router';
 import { useHistory } from 'react-router';
 import { shell } from 'electron'
 import Logo from '@assets/logo.png';

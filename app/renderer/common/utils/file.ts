@@ -25,5 +25,13 @@ const fileAction = {
   readDir: (path: string): Promise<string[]> => {
     return fsPromiseAPIs.readdir(path);
   },
+  /**
+   * @description 创建文件夹
+   * @param path 创建 /a/b/c，不管`/a` 和 /a/b 是否存在。
+   * @returns {Promise}
+   */
+   mkdirDir: (path: string): Promise<string | undefined> => {
+    return fsPromiseAPIs.mkdir(path, { recursive: true });
+  },
 }
 export default fileAction;

@@ -2,11 +2,23 @@
  * @desc electron 主入口
  */
  import path from 'path';
- import { app, BrowserWindow,ipcMain } from 'electron';
+ import { app, BrowserWindow,dialog,ipcMain } from 'electron';
  const ROOT_PATH = path.join(app.getAppPath(),'../')
  ipcMain.on('get-root-path',(event,arg)=>{
   event.reply('reply-root-path',ROOT_PATH)
  })
+ ipcMain.on('open-save-resume-path', (event, arg) => {
+  dialog
+    .showOpenDialog({
+      properties: ['openDirectory'],
+    })
+    .then((result) => {
+      event.reply('reply-save-resume-path', result.filePaths);
+    })
+    .catch((err) => {
+      event.reply('reply-save-resume-path', err);
+    });
+});
  function isDev() {
    // 👉 还记得我们配置中通过 webpack.DefinePlugin 定义的构建变量吗
    return process.env.NODE_ENV === 'development';

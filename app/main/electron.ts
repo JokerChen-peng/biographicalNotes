@@ -22,12 +22,24 @@
        nodeIntegration: true,
      },
    });
+   // 创建应用设置窗口
+  const settingWindow = new BrowserWindow({
+    width: 720,
+    height: 240,
+    resizable: false, // 👈 我们设置该窗口不可拉伸宽高
+    webPreferences: {
+      devTools: true,
+      nodeIntegration: true,
+    },
+  });
  
    if (isDev()) {
      // 👇 看到了吗，在开发环境下，我们加载的是运行在 7001 端口的 React
      mainWindow.loadURL(`http://127.0.0.1:7001`);
+     settingWindow.loadURL(`http://127.0.0.1:7001/setting.html`);
    } else {
      mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
+     settingWindow.loadURL(`file://${path.join(__dirname, '../dist/setting.html')}`);
    }
  }
  

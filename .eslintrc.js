@@ -1,3 +1,4 @@
+
 module.exports = {
   extends: [
     'alloy',
@@ -40,5 +41,6 @@ module.exports = {
     '@typescript-eslint/no-invalid-this': 'off',
     'react/jsx-key': 0,
     'no-undef': 0,
+    'max-nested-callbacks': ['warn', 5],
   },
 };

@@ -5,11 +5,18 @@ import TemplateList from '@src/container/templateList';
 import Resume from '@src/container/resume';
 import ROUTER  from '@src/common/constants/router';
 import useReadDirAssetsTemplateHooks from './Hooks/useReadDirAssetsTemplateHooks';
+import useThemeActionHooks from './hooks/useThemeActionHooks';
+
 function Router(){
   const readDirAssetsTemplateHooks = useReadDirAssetsTemplateHooks();
+  const initThemeConfig = useThemeActionHooks.useInitThemeConfig();
   // 👇 进行初始化工作
   useEffect(() => {
     readDirAssetsTemplateHooks();
+  }, []);
+  useEffect(() => {
+    // ...
+    initThemeConfig();
   }, []);
   return(
     <HashRouter>

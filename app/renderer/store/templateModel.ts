@@ -1,5 +1,10 @@
 export interface TStore{
-  resumeToolbarKeys:string[]
+  resumeToolbarKeys:string[];
+  templateList: TSTemplate.Item[];
+  /**
+   * @description 当前选中的模版
+   */
+  selectTemplate: TSTemplate.Item;
 }
 
 
@@ -7,7 +12,14 @@ const templateModel: TSRcReduxModel.Props<TStore> = {
   namespace: 'templateModel',
   openSeamlessImmutable: true,
   state: {
-    resumeToolbarKeys: [], // 选中工具条模块的keys
+    resumeToolbarKeys: [], 
+    templateList: [],
+    selectTemplate: {
+      templateId: '',
+      templateName: '',
+      templateCover: '',
+    },
+  
   },
 };
 

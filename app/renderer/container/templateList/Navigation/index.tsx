@@ -6,28 +6,48 @@ import TemplateCoverOne from '@assets/template/template1.jpg';
 import TemplateCoverTwo from '@assets/template/template2.jpg';
 import MyScrollBox from '@common/components/MyScrollBox';
 import MyButton from '@common/components/MyButton';
+import { useDispatch, useSelector } from 'react-redux';
 function Navigation() {
+  const dispatch = useDispatch();
+  const HEADER_HEIGHT = 92;
   const height = document.body.clientHeight;
-
+  const templateList: TSTemplate.Item[] = useSelector((state: any) => state.templateModel.templateList);
+  const selectTemplate: TSTemplate.Item = useSelector((state: any) => state.templateModel.selectTemplate);
+  const onChangeTemplate = (template: TSTemplate.Item) => {
+    dispatch({
+      type: 'templateModel/setStore',
+      payload: {
+        key: 'selectTemplate',
+        values: template,
+      },
+    });
+  };
   return (
     <div styleName="navigation">
       <MyScrollBox maxHeight={height - 60 - 32}>
-        {/* 悬浮效果一：属于当前模版 */}
-        <div styleName="template">
-          <img styleName="cover" src={TemplateCoverOne} />
-          <div styleName="mask">
-            <img styleName="use" src={UseIcon} />
-          </div>
-        </div>
-        {/* 悬浮效果二：可选择预览模版 */}
-        <div styleName="template">
-          <img styleName="cover" src={TemplateCoverTwo} />
-          <div styleName="mask">
-            <MyButton size="middle" className="view-btn" onClick={() => {}}>
-              预览模版
-            </MyButton>
-          </div>
-        </div>
+        {templateList &&
+          templateList.length > 0 &&
+          templateList.map((template: TSTemplate.Item) => {
+            return (
+              <div styleName="template" key={template?.templateId}>
+                <img styleName="cover" src={template?.templateCover} />
+                <div styleName="mask">
+                  {selectTemplate?.templateId === template?.templateId && <img styleName="use" src={UseIcon} />}
+                  {selectTemplate?.templateId !== template?.templateId && (
+                    <MyButton
+                      size="middle"
+                      className="view-btn"
+                      onClick={() => {
+                        onChangeTemplate(template);
+                      }}
+                    >
+                      预览模版
+                    </MyButton>
+                  )}
+                </div>
+              </div>
+            );
+          })}
       </MyScrollBox>
     </div>
   );

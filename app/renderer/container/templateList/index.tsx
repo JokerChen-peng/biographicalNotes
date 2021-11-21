@@ -4,12 +4,19 @@ import './index.less';
 import Header from './Header';
 import Navigation from './Navigation';
 import StaticResume from './StaticResume'
+import MyRectSize from '@src/common/components/MyRectSize';
 
 function TemplateList() {
   return <div styleName="container"> <Header />
  <div styleName="content">
- <Navigation/>
-<StaticResume/>
+        <MyRectSize>
+          <MyRectSize.Left>
+            <Navigation />
+          </MyRectSize.Left>
+          <MyRectSize.Right>
+            <StaticResume />
+          </MyRectSize.Right>
+        </MyRectSize>
  </div>
   </div>;
 }

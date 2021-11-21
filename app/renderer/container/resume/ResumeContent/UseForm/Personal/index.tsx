@@ -41,7 +41,7 @@ function Personal({ onClose }: IProps) {
           </div>
           <div styleName="right">
             <MyInput onChange={(e) => {
-               updateResumeHook('base/hometown', e.target?.value || '');
+              //  updateResumeHook('base/hometown', e.target?.value || '');
             }} value={base?.hometown || ''} placeholder="请输入籍贯" allowClear={true} />
           </div>
         </div>

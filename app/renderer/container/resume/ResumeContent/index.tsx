@@ -20,7 +20,11 @@ function ResumeContent() {
   const [formName, setFormName] = useState('');
   const [showFormModal, setShowFormModal] = useState(false);
   const HEADER_ACTION_HEIGHT = 92;
-  const height = document.body.clientHeight;
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    if (document.body && document.body.clientHeight > 0)
+      setHeight(document.body.clientHeight);
+  }, [document.body]);
   useEffect(() => {
     document.addEventListener(MESSAGE_EVENT_NAME_MAPS.OPEN_FORM_MODAL, onReceive);
     return () => {

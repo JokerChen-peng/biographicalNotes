@@ -9,7 +9,7 @@
 }
  const ROOT_PATH = path.join(app.getAppPath(),'../')
  ipcMain.on('get-root-path',(event,arg)=>{
-  event.reply('reply-root-path',ROOT_PATH)
+  event.reply('reply-root-path',__dirname)
  })
  ipcMain.on('open-save-resume-path', (event, arg) => {
   dialog

@@ -1,0 +1,30 @@
+directories:
+  output: package
+  buildResources: build
+appId: jrresume.ElectronReact
+productName: jrresume
+copyright: Copyright © 2021 ${author}
+files:
+  - filter:
+      - dist/**/*
+      - package.json
+      - node_modules/
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity
+dmg:
+  contents:
+    - x: 130
+      'y': 220
+      type: link
+      path: /Applications
+    - x: 410
+      'y': 220
+      type: file
+win:
+  target:
+    - msi
+    - nsis
+electronVersion: 11.1.1

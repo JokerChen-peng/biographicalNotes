@@ -13,6 +13,7 @@ declare namespace TSTheme {
     /**
      * @description 背景色
      */
+    
     backgroundColor: string;
   }
 }

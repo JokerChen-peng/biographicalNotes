@@ -13,7 +13,9 @@ function Navigation() {
   const height = document.body.clientHeight;
   const templateList: TSTemplate.Item[] = useSelector((state: any) => state.templateModel.templateList);
   const selectTemplate: TSTemplate.Item = useSelector((state: any) => state.templateModel.selectTemplate);
-  const onChangeTemplate = (template: TSTemplate.Item) => {
+  
+  // 选中模版，存入Redux
+  const onSelect = (template: TSTemplate.Item) => {
     dispatch({
       type: 'templateModel/setStore',
       payload: {
@@ -38,7 +40,7 @@ function Navigation() {
                       size="middle"
                       className="view-btn"
                       onClick={() => {
-                        onChangeTemplate(template);
+                        onSelect(template);
                       }}
                     >
                       预览模版

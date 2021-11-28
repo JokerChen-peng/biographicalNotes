@@ -6,7 +6,7 @@ import {
   MenuItem,
   BrowserWindow,
 } from 'electron';
-import { MyBrowserWindow } from './electron';
+import { MyBrowserWindow,isDev } from './electron';
 
 const customMenu: (MenuItemConstructorOptions | MenuItem)[] = [
   {
@@ -92,22 +92,6 @@ const customMenu: (MenuItemConstructorOptions | MenuItem)[] = [
           }
         },
       },
-      {
-        label: '切换开发者工具',
-        role: 'toggleDevTools',
-        accelerator: (() => {
-          if (process.platform === 'darwin') {
-            return 'Alt+Command+I';
-          } else {
-            return 'Ctrl+Shift+I';
-          }
-        })(),
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.webContents.openDevTools();
-          }
-        },
-      },
     ],
   },
   {
@@ -150,6 +134,25 @@ const customMenu: (MenuItemConstructorOptions | MenuItem)[] = [
     ],
   },
 ];
+
+if (isDev()) {
+  (customMenu[2]?.submenu as any).push({
+    label: '切换开发者工具',
+    role: 'toggleDevTools',
+    accelerator: (() => {
+      if (process.platform === 'darwin') {
+        return 'Alt+Command+I';
+      } else {
+        return 'Ctrl+Shift+I';
+      }
+    })(),
+    click: (item: any, focusedWindow: MyBrowserWindow) => {
+      if (focusedWindow) {
+        focusedWindow.webContents.openDevTools();
+      }
+    },
+  });
+}
 
 if (process.platform === 'darwin') {
   const { name } = app;

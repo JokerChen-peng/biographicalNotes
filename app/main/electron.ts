@@ -24,7 +24,7 @@
       event.reply('reply-save-resume-path', err);
     });
 });
- function isDev() {
+ export function isDev() {
    // 👉 还记得我们配置中通过 webpack.DefinePlugin 定义的构建变量吗
    return process.env.NODE_ENV === 'development';
  }
@@ -34,8 +34,9 @@
    const mainWindow = new BrowserWindow({
      width: 1200,
      height: 800,
+     resizable: isDev(),
      webPreferences: {
-       devTools: true,
+       devTools: isDev(),
        nodeIntegration: true,
      },
    });
@@ -43,10 +44,10 @@
    const settingWindow: MyBrowserWindow = new BrowserWindow({
     width: 720,
     height: 240,
+    resizable: isDev(), // 根据环境进行判断
     show: false, // 设置为 false，使得窗口创建时不展示
-    resizable: false,
     webPreferences: {
-      devTools: true,
+      devTools: isDev(), // 根据环境进行判断
       nodeIntegration: true,
     },
   });

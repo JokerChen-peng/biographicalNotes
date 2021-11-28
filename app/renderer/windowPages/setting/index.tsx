@@ -8,6 +8,12 @@ import { useReadGlobalConfigFile, useUpdateGlobalConfigFile,} from '@src/hooks/u
 
 
 function Setting() {
+  const onHideWindow = () => {
+    ipcRenderer.send('Electron:SettingWindow-hide-event');
+  };
+  const onMinWindow = () => {
+    ipcRenderer.send('Electron:SettingWindow-min-event');
+  };
   const [resumeSavePath, setResumeSavePath] = useState('');
     // 👇 1. 引入 Hooks，进行读取文件内容和更新内容
     const readAppConfigThemeFile = useReadGlobalConfigFile();
@@ -44,12 +50,22 @@ function Setting() {
   };
   return (
     <div styleName="container">
-      <p styleName="label">修改简历数据储存路径</p>
-      <div styleName="input">
-        <div styleName="value">{resumeSavePath || '当前存储路径为：'}</div>
-        <div styleName="update-btn" onClick={onChangePath}>
-          更改路径
+       <div styleName="menu">
+        <div styleName="hide" onClick={onHideWindow}>
+          x
         </div>
+        <div styleName="min" onClick={onMinWindow}>
+          -
+        </div>
+      </div>
+      <div styleName="content">
+        <p styleName="label">修改简历数据储存路径</p>
+        <div styleName="input">
+          <div styleName="value">{resumeSavePath || '当前存储路径为：'}</div>
+          <div styleName="update-btn" onClick={onChangePath}>
+            更改路径
+          </div>
+          </div>
       </div>
     </div>
   );

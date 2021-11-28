@@ -2,7 +2,11 @@
  * @desc electron 主入口
  */
  import path from 'path';
- import { app, BrowserWindow,dialog,ipcMain } from 'electron';
+ import customMenu from './customMenu';
+ import { app, BrowserWindow,dialog,ipcMain, Menu } from 'electron';
+ export interface MyBrowserWindow extends BrowserWindow {
+  uid?: string;
+}
  const ROOT_PATH = path.join(app.getAppPath(),'../')
  ipcMain.on('get-root-path',(event,arg)=>{
   event.reply('reply-root-path',ROOT_PATH)
@@ -35,16 +39,26 @@
      },
    });
    // 创建应用设置窗口
-  const settingWindow = new BrowserWindow({
+   const settingWindow: MyBrowserWindow = new BrowserWindow({
     width: 720,
     height: 240,
-    resizable: false, // 👈 我们设置该窗口不可拉伸宽高
+    show: false, // 设置为 false，使得窗口创建时不展示
+    resizable: false,
     webPreferences: {
       devTools: true,
       nodeIntegration: true,
     },
   });
- 
+  ipcMain.on('Electron:SettingWindow-hide-event', () => {
+    if (settingWindow.isVisible()) {
+      settingWindow.hide();
+    }
+  });
+  ipcMain.on('Electron:SettingWindow-min-event', () => {
+    if (settingWindow.isVisible()) {
+      settingWindow.minimize();
+    }
+  });
    if (isDev()) {
      // 👇 看到了吗，在开发环境下，我们加载的是运行在 7001 端口的 React
      mainWindow.loadURL(`http://127.0.0.1:7001`);
@@ -60,5 +74,10 @@
    app.on('activate', function () {
      if (BrowserWindow.getAllWindows().length === 0) createWindow();
    });
+   app.on('ready', () => {
+    const menu = Menu.buildFromTemplate(customMenu);
+    Menu.setApplicationMenu(menu);
+  });
+  
  });
  

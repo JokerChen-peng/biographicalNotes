@@ -8,10 +8,7 @@ module.exports = {
   // 多入口，这在第十七章有讲解
   entry: {
     index: path.resolve(__dirname, '../app/renderer/app.tsx'),
-    setting: path.resolve(
-      __dirname,
-      '../app/renderer/windowPages/setting/app.tsx'
-    ),
+    setting: path.resolve(__dirname, '../app/renderer/windowPages/setting/app.tsx'),
   },
   output: {
     filename: '[name].[hash].js',
@@ -80,10 +77,8 @@ module.exports = {
           from: path.resolve(__dirname, '../assets'),
           to: path.resolve(__dirname, '../dist/assets'),
         },
-        {
-          from: path.resolve(__dirname, '../appConfig'),
-          to: path.resolve(__dirname, '../dist/appConfig'),
-        }]}),
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../app/renderer/index.html'),
       filename: path.resolve(__dirname, '../dist/index.html'),

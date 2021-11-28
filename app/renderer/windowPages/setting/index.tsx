@@ -1,9 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import './index.less';
-import MyButton from '@common/components/MyButton';
 import { ipcRenderer } from 'electron';
-import { getAppPath } from '@common/utils/appPath';
+import { getUserStoreDataPath } from '@common/utils/appPath';
 import { useReadGlobalConfigFile, useUpdateGlobalConfigFile,} from '@src/hooks/useGlobalConfigActionHooks';
 
 
@@ -25,7 +24,7 @@ function Setting() {
           setResumeSavePath(value?.resumeSavePath);
         } else {
           // 👇 2.2 不存在默认路径，则设置默认路径并更新文件内容
-          getAppPath().then((appPath: string) => {
+          getUserStoreDataPath().then((appPath: string) => {
             setResumeSavePath(`${appPath}resumeCache`);
             updateGlobalConfigFile('resumeSavePath', `${appPath}resumeCache`);
           });

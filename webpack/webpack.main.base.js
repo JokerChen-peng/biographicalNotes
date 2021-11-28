@@ -12,6 +12,9 @@ module.exports = {
     // 主进程不会存在 jsx、tsx，所以不用配置这些后缀
     // 至于为什么不需要，会在下一章节优化处说明
     extensions: ['.js', '.ts'],
+    alias: {
+      '@common': path.join(__dirname, '../', 'app/renderer/common'),
+    },
   },
   module: {
     rules: [

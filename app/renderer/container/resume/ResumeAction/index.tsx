@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import MyModal from '@src/common/components/MyModal';
 import useClickAway from '@common/hook/useClickAway';
 import { intToDateString } from '@common/utils/time';
-import { getAppPath } from '@common/utils/appPath';
+import { getUserStoreDataPath } from '@common/utils/appPath';
 import { useReadGlobalConfigFile, useUpdateGlobalConfigFile } from '@src/hooks/useGlobalConfigActionHooks';
 import fileAction from '@src/common/utils/file';
 import { createUID } from '@src/common/utils';
@@ -45,7 +45,7 @@ function ResumeAction() {
           saveResumeJson(value?.resumeSavePath);
         } else {
           // 👇 2.2 不存在默认路径，则设置默认路径并更新文件内容
-          getAppPath().then((appPath: string) => {
+          getUserStoreDataPath().then((appPath: string) => {
             updateGlobalConfigFile('resumeSavePath', `${appPath}resumeCache`);
             saveResumeJson(`${appPath}resumeCache`);
           });
@@ -53,23 +53,41 @@ function ResumeAction() {
       });
     };
       // 存储数据json
-  const saveResumeJson = (resumeSavePath: string) => {
-    const date = intToDateString(new Date().valueOf(), '_');
-    const prefix = `${date}_${base?.username}_${base?.school}_${work?.job}_${createUID()}.json`;
-    // 如果路径中不存在 resumeCache 文件夹，则默认创建此文件夹
-    if (resumeSavePath && resumeSavePath.search('resumeCache') > -1) {
-      fileAction?.write(`${resumeSavePath}/${prefix}`, resume, 'utf8');
-    } else {
-      fileAction
-        ?.mkdirDir(`${resumeSavePath}/resumeCache`)
-        .then((path) => {
-          if (path) fileAction?.write(`${path}/${prefix}`, resume, 'utf8');
-        })
-        .catch(() => {
-          console.log('创建文件夹失败');
-        });
-    }
-  };
+      const saveResumeJson = (resumeSavePath: string) => {
+        const date = intToDateString(new Date().valueOf(), '_');
+        const prefix = `${date}_${base?.username}_${base?.school}_${work?.job}_${createUID()}.json`;
+        // 如果路径中不存在 resumeCache 文件夹，则默认创建此文件夹
+        if (resumeSavePath && resumeSavePath.search('resumeCache') > -1) {
+          fileAction
+            .canRead(resumeSavePath)
+            .then(() => {
+              fileAction?.write(`${resumeSavePath}/${prefix}`, resume, 'utf8');
+            })
+            .catch(() => {
+              fileAction
+                .mkdirDir(resumeSavePath)
+                .then(() => {
+                  fileAction?.write(`${resumeSavePath}/${prefix}`, resume, 'utf8');
+                })
+                .catch(() => {
+                  console.log('创建文件夹失败');
+                });
+            });
+        } else {
+          fileAction
+            .mkdirDir(`${resumeSavePath}/resumeCache`)
+            .then(() => {
+              fileAction?.write(
+                `${resumeSavePath}/resumeCache/${prefix}`,
+                resume,
+                'utf8'
+              );
+            })
+            .catch(() => {
+              console.log('创建文件夹失败');
+            });
+        }
+      };
 
   return (
     <div styleName="actions">

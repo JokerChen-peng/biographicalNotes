@@ -3,8 +3,9 @@ import './index.less';
 import { ROUTER_ENTRY,ROUTER_KEY} from '@src/common/constants/router';
 import { useHistory } from 'react-router';
 import { shell } from 'electron'
+import { useSelector } from 'react-redux';
 import Logo from '@assets/logo.png';
-import { isHttpOrHttpsUrl } from '@common/utils/router'
+import { compilePath, isHttpOrHttpsUrl } from '@common/utils/router';
 // 👇  引入此组件
 import MyTheme from '@common/components/MyTheme';
 // 👇 引入此Hook
@@ -13,11 +14,22 @@ import useThemeActionHooks from '@src/hooks/useThemeActionHooks';
 function Root() {
   const [currentTheme] = useThemeActionHooks.useGetCurrentTheme();
    const history = useHistory();
+   const selectTemplate = useSelector((state: any) => state.templateModel.selectTemplate);
    const onRouterTolink = (router:TSRouter.Item) => {
      if (isHttpOrHttpsUrl(router.url)){
       shell.openExternal(router.url)
      }else{
-      history.push(router.url)
+      if (router.key !== ROUTER_KEY.resume) {
+        history.push(compilePath(router.url));
+      } else {
+        history.push(
+          compilePath(router.url, {
+            fromPath: ROUTER_KEY.root,
+            templateId: selectTemplate?.templateId,
+            templateIndex: selectTemplate?.templateIndex,
+          })
+        );
+      }
      }
    }
   return (

@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import './index.less';
-import { useHistory } from 'react-router';
-import ROUTER from '@src/common/constants/router';
+import { useHistory, useParams } from 'react-router';
+import { compilePath } from '@common/utils/router';
+import ROUTER, { ROUTER_KEY } from '@common/constants/router';
 import MyButton from '@common/components/MyButton';
 import { toPrintPdf } from '@common/utils/htmlToPdf';
 import { useSelector } from 'react-redux';
@@ -19,8 +20,17 @@ function ResumeAction() {
   const base: TSResume.Base = useSelector((state: any) => state.resumeModel.base);
   const work: TSResume.Work = useSelector((state: any) => state.resumeModel.work);
   const history = useHistory()
+  const routerParams = useParams<{ fromPath: string; templateId: string; templateIndex: string }>();
   const [showModal, setShowModal] = useState(false);
-  const onBack =() => history.push(ROUTER.root)
+  const onBack = () => {
+    if (routerParams?.fromPath === ROUTER_KEY.root) {
+      history.push(compilePath(ROUTER.root));
+    } else if (routerParams?.fromPath === ROUTER_KEY.templateList) {
+      history.push(compilePath(ROUTER.templateList));
+    } else {
+      console.log('here');
+    }
+  };
   const resume = useSelector((state: any) => state.resumeModel);
   const readAppConfigThemeFile = useReadGlobalConfigFile();
   const updateGlobalConfigFile = useUpdateGlobalConfigFile();

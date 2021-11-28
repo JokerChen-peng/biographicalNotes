@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
+import { useParams } from 'react-router';
 import * as UseTemplateList from './UseTemplate';
 import MyScrollBox from '@common/components/MyScrollBox';
 import Messager, { MESSAGE_EVENT_NAME_MAPS } from '@common/messager';
@@ -15,6 +16,7 @@ import ProjectExperience from './UseForm/ProjectExperience';
 import SchoolExperience from './UseForm/SchoolExperience';
 import WorkExperience from './UseForm/WorkExperience';
 function ResumeContent() {
+  const routerParams = useParams<{ fromPath: string; templateId: string; templateIndex: string }>();
   const [formName, setFormName] = useState('');
   const [showFormModal, setShowFormModal] = useState(false);
   const HEADER_ACTION_HEIGHT = 92;
@@ -38,7 +40,7 @@ function ResumeContent() {
   console.log('resume被执行了')
   return (
     <MyScrollBox maxHeight={height - HEADER_ACTION_HEIGHT}>
-      <UseTemplateList.TemplateOne />
+      {routerParams?.templateId && Number(routerParams?.templateIndex) === 0 && <UseTemplateList.TemplateOne />}
       {
         showFormModal&&(
           <>

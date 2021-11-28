@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter,Redirect } from 'react-router-dom';
 import Root from '@src/container/root';
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route';
 import TemplateList from '@src/container/templateList';
 import Resume from '@src/container/resume';
 import ROUTER  from '@src/common/constants/router';
@@ -20,19 +21,13 @@ function Router(){
   }, []);
   return(
     <HashRouter>
-      <Switch>
-        <Route path={ROUTER.root} exact>
-          <Root/>
-        </Route>
-        <Route path={ROUTER.templateList} exact>
-          <TemplateList />
-        </Route>
-        <Route path={ROUTER.resume} exact>
-          <Resume />
-        </Route>
-      </Switch>
-      <Redirect to={ROUTER.root}/>
-    </HashRouter>
+    <CacheSwitch>
+      <CacheRoute path={ROUTER.root} exact component={Root} />
+      <CacheRoute path={ROUTER.resume} exact component={Resume} />
+      <CacheRoute path={ROUTER.templateList} exact component={TemplateList} />
+      <Redirect from={ROUTER.root} exact to={ROUTER.root} />
+    </CacheSwitch>
+  </HashRouter>
   )
 }
 export default Router
